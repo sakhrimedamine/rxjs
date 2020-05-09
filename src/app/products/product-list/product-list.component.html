@@ -1,0 +1,49 @@
+<div class="container" *ngIf="vm$ | async as vm">
+  <div class="row justify-content-between">
+    <div class="col-3">
+      <select class="form-control"
+              (change)="onSelected($event.target.value)">
+        <option value="0">- Display All -</option>
+        <option *ngFor="let category of vm.categories"
+                [value]="category.id">{{ category.name }}</option>
+      </select>
+    </div>
+    <div class="col-2">
+      <button type="button"
+              class="btn btn-outline-secondary"
+              (click)="onAdd()">Add Product</button>
+    </div>
+  </div>
+
+<div class="table-responsive">
+  <table class="table mb-0"
+         *ngIf="vm.filtredProducts as products">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Code</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>In Stock</th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let product of products" >
+      <tr (click)='onSelectedProduct(product.id)'
+          [class.selected]="product?.id == (selectedProduct$ | async)?.id">
+        <td>{{ product.productName }}</td>
+        <td>{{ product.productCode }}</td>
+        <td>{{ product.category }}</td>
+        <td>{{ product.price | currency:"USD":"symbol":"1.2-2" }}</td>
+        <td>{{ product.quantityInStock }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<br>
+<br>
+<div class="table-responsive" *ngIf="selectedProduct$ | async">
+  <app-product-details>
+  </app-product-details>
+</div>
+</div>
